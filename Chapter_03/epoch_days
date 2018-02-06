@@ -8,6 +8,8 @@ seconds_gnu_epoch=`date +'%s'`
 # This is the equation that works for the Gregorian calendar for years from
 # 1582 through 9999.  If you need to calculate something else, you'll need 
 # a new equation.
+# 先计算出自公元1970.1.1以来的天数epoch_days
+# 用公式$(((year*365)+(year/4)-(year/100)+(year/400)+(month*306001/10000)+day))计算
 epoch_days=$(((1969*365)+(1969/4)-(1969/100)+(1969/400)+(14*306001/10000)+1))
 
 day=`date +'%d'`
@@ -22,6 +24,10 @@ else
   year=$((year-1))
 fi
 
+# 用下面公式来计算当前日期自公元以来天数时, 对于1月和2月,计算前要给month加上13,给year-1
 today_days=$(((year*365)+(year/4)-(year/100)+(year/400)+(month*306001/10000)+day))
 days_since_epoch=$((today_days-epoch_days))
 echo $days_since_epoch
+
+# 以秒为单位输出
+seconds_since_epoch=`echo "($days_since_epoch*86400)+($hour*3600)+($minute*60)+$second" | bc`

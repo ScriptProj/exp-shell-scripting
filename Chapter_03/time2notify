@@ -1,5 +1,6 @@
 #!/bin/sh
 
+# 脚本被调用后,如果当前日期和小时在参数指定范围内,脚本返回0,并对用户给出类似含义的信息.否则返回1
 #
 # This script is the basic structure for performing or not performing a
 # task based on the hour of the day or the day of the week.
@@ -31,6 +32,7 @@ HOUR=`date +%H`
 if [ $DAY -ge $DAY_BEGIN -a $DAY -le $DAY_END -a $HOUR -ge $HOUR_BEGIN -a $HOUR -le $HOUR_END ]
 then
   # traditionally a good return or in this case, a yes.
+  #真正执行时,应调用类似QuickPage等工具来执行提示操作
   echo "It is time to notify"
   echo 0
 else

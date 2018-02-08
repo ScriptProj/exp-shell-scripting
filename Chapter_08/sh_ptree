@@ -3,6 +3,9 @@
 #
 # Display process table in tree form
 #
+# 8.3 用bourne shell实现进程树
+# 与前两个版本的主要不同之处在于ps命令的输出被手动地,一次一行的重复存储在一个临时文件中.这消除了未定义变量的问题
+# 和8.2一样, 用非直接变量实现进程树
 
 if [ "$1" = "" ]
 then
@@ -23,6 +26,7 @@ count=0
 while [ $count -le $pscount ]
 do
   #line=`tail -n +$count $PSFILE | head -n 1`
+  # 使用tail工具从适当的行开始输出,再用管道将其传送给head工具,将其获取输出的第一行
   line=`tail +$count $PSFILE | head -1`
 #echo $line
   line=`echo "$line" | sed -e s/\>/\\\\\\>/g`
@@ -50,7 +54,7 @@ print_tree $proc ""
 print_tree () {
 id=$1
 
-echo -ne "$2$id \c"
+echo -ne "$2$id \c" # \c指示第一个echo命令不要在输出之后回车.随后由echo语句输出owner和command变量完成整个输出
 eval echo \"'$owner'$id '$command'$id\"
 
 if eval [ \"'$children'$id\" = "\"\"" ]

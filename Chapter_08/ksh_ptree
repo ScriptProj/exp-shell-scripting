@@ -3,6 +3,7 @@
 #
 # Display process table in tree form
 #
+# 8.2 用非直接变量实现进程树,相对数组,更容易移植
 
 if [ "$1" = "" ]
 then
@@ -24,8 +25,9 @@ do
   # works in ksh/pdksh as long as the subscript is below 1024.. here it is not
   # bash works fine though.
   #set -A process $line for a ksh script
-  #declare -a process=( $line )
-  set -A process $line
+  # 需要根据此脚本运行于哪种shell环境来决定用declare或set,脚本的其余代码在任何shell下都不需要改写
+  #declare -a process=( $line )  #bash环境
+  set -A process $line           #ksh环境
   pid=${process[1]}
   eval owner$pid=${process[0]}
   eval ppid$pid=${process[2]}
